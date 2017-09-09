@@ -9,6 +9,7 @@ public class Game {
         jar = new Jar();
     }
 
+    //this should be in prompter
     public void setup() {
         Scanner scanner = new Scanner(System.in);
 
@@ -29,9 +30,6 @@ public class Game {
         jar.fill();
     }
 
-    public boolean isMatch() {
-
-    }
 
     public Jar getJar() {
         return jar;

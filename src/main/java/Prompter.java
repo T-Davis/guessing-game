@@ -18,19 +18,27 @@ public class Prompter {
         System.out.printf("Your goal is to guess how many %s are in the jar. " +
                 "Your guess should be between 1 and %d.", jar.getItemName(), jar.getMaxNumItems());
         System.out.printf("%nReady?  (press ENTER to start guessing)");
+        scanner.nextLine();
+        promptForGuess();
     }
 
-    public boolean promptForGuess() {
-        do {
-            System.out.print("Guess: ");
-            int guess = scanner.nextInt();
-            game.setNumGuesses((game.getNumGuesses() + 1));
+    public void promptForGuess() {
+        System.out.print("Guess: ");
+        int guess = scanner.nextInt();
+        game.setNumGuesses((game.getNumGuesses() + 1));
 
-            if (guess == jar.getNumItems()) {
-                System.out.printf("Congratulations - You guessed that there are %d %s in the jar! " +
-                        "It took you %d guess(es) to get it right.");
-            }
-        } while ()
+        //this needs moved to diff method
+        if (guess == jar.getNumItems()) {
+            System.out.printf("Congratulations - You guessed that there are %d %s in the jar! " +
+                    "It took you %d guess(es) to get it right.",
+                    jar.getNumItems(), jar.getItemName(), game.getNumGuesses());
+        } else if (guess < jar.getNumItems()) {
+            System.out.println("Your guess is low");
+            promptForGuess();
+        } else if (guess > jar.getNumItems()) {
+            System.out.println("Your guess is high");
+            promptForGuess();
+        }
     }
 
 }
