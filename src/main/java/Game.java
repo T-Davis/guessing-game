@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class Game {
 
     private Jar jar;
@@ -8,6 +6,13 @@ public class Game {
 
     public Game() {
         jar = new Jar();
+    }
+
+    public boolean applyGuess(int guess) {
+        if (guess > jar.getMaxNumItems() || guess < 1) {
+            throw new IllegalArgumentException("Your guess must be between 1 and " + jar.getMaxNumItems());
+        }
+        return true;
     }
 
     public boolean isWon() {

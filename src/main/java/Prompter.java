@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Prompter {
@@ -13,8 +14,8 @@ public class Prompter {
     }
 
     public void setupGame() {
-        System.out.printf("ADMINISTRATOR SETUP%n");
-        System.out.println("=====================");
+        System.out.printf("ADMINISTRATOR SETUP %n");
+        System.out.println("===================== ");
 
         System.out.print("Name of items in the jar: ");
         jar.setItemName(scanner.nextLine());
@@ -30,27 +31,39 @@ public class Prompter {
         System.out.println("PLAYER");
         System.out.println("========");
         System.out.printf("Your goal is to guess how many %s are in the jar. " +
-                "Your guess should be between 1 and %d.", jar.getItemName(), jar.getMaxNumItems());
-        System.out.printf("%nReady?  (press ENTER to start guessing)");
-        scanner.nextLine();
+                "Your guess should be between 1 and %d. %n", jar.getItemName(), jar.getMaxNumItems());
+        System.out.printf("Ready? Start Guessing! %n");
     }
 
-    //sanitize guesses
     public void promptForGuess() {
-        System.out.print("Guess: ");
-        game.setGuess(scanner.nextInt());
+        boolean isAcceptable = false;
+        int guess = 1;
+
+        do {
+            System.out.print("Guess: ");
+            guess = scanner.nextInt();
+
+            try {
+                isAcceptable = game.applyGuess(guess);
+            }  catch (IllegalArgumentException iae) {
+                System.out.printf("%s.  Please try again. %n", iae.getMessage());
+            }
+
+        } while (!isAcceptable);
+        game.setGuess(guess);
         game.setNumGuesses((game.getNumGuesses() + 1));
     }
+
 
     public void outcome() {
         if (game.isWon()) {
             System.out.printf("Congratulations - You guessed that there are %d %s in the jar! " +
-                            "It took you %d guess(es) to get it right.%n",
+                            "It took you %d guess(es) to get it right. %n",
                     jar.getNumItems(), jar.getItemName(), game.getNumGuesses());
         } else if (game.getGuess() < jar.getNumItems()) {
-            System.out.printf("Your guess is low%n");
+            System.out.printf("Your guess is too low. %n");
         } else if (game.getGuess() > jar.getNumItems()) {
-            System.out.printf("Your guess is high%n");
+            System.out.printf("Your guess is too high. %n");
         }
     }
 
