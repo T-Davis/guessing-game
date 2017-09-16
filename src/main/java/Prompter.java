@@ -1,4 +1,3 @@
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Prompter {
@@ -7,37 +6,41 @@ public class Prompter {
     private Jar jar;
     private Scanner scanner;
 
-    public Prompter(Game game, Jar jar) {
+    public Prompter(Game game) {
         this.game = game;
-        this.jar = jar;
         this.scanner = new Scanner(System.in);
     }
 
     public void setupGame() {
+        String itemName;
+        int maxNumItems;
+
         System.out.printf("ADMINISTRATOR SETUP %n");
         System.out.println("===================== ");
 
-        System.out.print("Name of items in the jar: ");
-        jar.setItemName(scanner.nextLine());
+        System.out.print("What type of item? ");
+        itemName = scanner.nextLine();
 
-        System.out.printf("Maximum number of %s in the jar: ", jar.getItemName());
-        jar.setMaxNumItems(scanner.nextInt());
+        System.out.printf("What is the maximum amount of %s? ", itemName);
+        maxNumItems = scanner.nextInt();
         System.out.println();
+        jar = new Jar(itemName, maxNumItems);
         jar.fill();
-        //need to sanitize input
+        game.setJar(jar);
     }
 
     public void startGame() {
         System.out.println("PLAYER");
         System.out.println("========");
-        System.out.printf("Your goal is to guess how many %s are in the jar. " +
-                "Your guess should be between 1 and %d. %n", jar.getItemName(), jar.getMaxNumItems());
+        System.out.printf("How many %s are in the jar? " +
+                        "Pick a number between 1 and %d %n",
+                        jar.getItemName(), jar.getMaxNumItems());
         System.out.printf("Ready? Start Guessing! %n");
     }
 
     public void promptForGuess() {
         boolean isAcceptable = false;
-        int guess = 1;
+        int guess;
 
         do {
             System.out.print("Guess: ");
@@ -45,11 +48,12 @@ public class Prompter {
 
             try {
                 isAcceptable = game.applyGuess(guess);
-            }  catch (IllegalArgumentException iae) {
-                System.out.printf("%s.  Please try again. %n", iae.getMessage());
+            } catch (IllegalArgumentException iae) {
+                System.out.printf("%s. Please try again. %n", iae.getMessage());
             }
 
         } while (!isAcceptable);
+
         game.setGuess(guess);
         game.setNumGuesses((game.getNumGuesses() + 1));
     }
@@ -59,11 +63,11 @@ public class Prompter {
         if (game.isWon()) {
             System.out.printf("Congratulations - You guessed that there are %d %s in the jar! " +
                             "It took you %d guess(es) to get it right. %n",
-                    jar.getNumItems(), jar.getItemName(), game.getNumGuesses());
+                            jar.getNumItems(), jar.getItemName(), game.getNumGuesses());
         } else if (game.getGuess() < jar.getNumItems()) {
-            System.out.printf("Your guess is too low. %n");
+            System.out.printf("Your guess is too low %n");
         } else if (game.getGuess() > jar.getNumItems()) {
-            System.out.printf("Your guess is too high. %n");
+            System.out.printf("Your guess is too high %n");
         }
     }
 

@@ -6,6 +6,11 @@ public class Jar {
     private int numItems;
     private int maxNumItems;
 
+    public Jar(String itemName, int maxNumItems) {
+        this.itemName = itemName;
+        this.maxNumItems = maxNumItems;
+    }
+
     public void fill() {
         Random random = new Random();
         numItems = random.nextInt(maxNumItems) + 1;
@@ -15,23 +20,12 @@ public class Jar {
         return itemName;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
     public int getNumItems() {
         return numItems;
-    }
-
-    public void setNumItems(int numItems) {
-        this.numItems = numItems;
     }
 
     public int getMaxNumItems() {
         return maxNumItems;
     }
 
-    public void setMaxNumItems(int maxNumItems) {
-        this.maxNumItems = maxNumItems;
-    }
 }
