@@ -61,9 +61,18 @@ public class Prompter {
 
     public void outcome() {
         if (game.isWon()) {
-            System.out.printf("Congratulations - You guessed that there are %d %s in the jar! " +
-                            "It took you %d guess(es) to get it right. %n",
-                            jar.getNumItems(), jar.getItemName(), game.getNumGuesses());
+            int guesses = game.getNumGuesses();
+
+            if (guesses == 1) {
+                System.out.printf("Congratulations - You guessed that there are %d %s in the jar! " +
+                                "You got it in %d attempt. %n",
+                        jar.getNumItems(), jar.getItemName(), guesses);
+            } else {
+                System.out.printf("Congratulations - You guessed that there are %d %s in the jar! " +
+                                "You got it in %d attempts. %n",
+                        jar.getNumItems(), jar.getItemName(), guesses);
+            }
+
         } else if (game.getGuess() < jar.getNumItems()) {
             System.out.printf("Your guess is too low %n");
         } else if (game.getGuess() > jar.getNumItems()) {
